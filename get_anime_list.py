@@ -3,6 +3,8 @@ import numpy as np
 
 import pandas as pd
 
+import json
+
 
 def get_anime_list(username_input):
     CLIENT_ID = 'd3ec3d338e2dff3f68f91d8388258eb3'
@@ -86,7 +88,7 @@ def get_anime_list_genres(id_arr):
     anime_tv_list = list(anime_df['anime_id'])
 
 
-    user_anime_genres = {
+    total_user_anime_genres = {
         "Action" : 0,
         "Award Winning" : 0,
         "Sci-Fi" : 0,
@@ -112,17 +114,27 @@ def get_anime_list_genres(id_arr):
 
     #for anime_id in anime_df['anime_id'].items():
     #    print(anime_id)
-
-
-    print(list(anime_df[anime_df['anime_id'] == 1]['Genres']))
-
+    
     """
+    for genre in str(list(anime_df[anime_df['anime_id'] == 31646]['Genres'])[0]).split(", "):
+        print(genre)
+    """
+
+    
     for user_anime_id in id_arr:
         if user_anime_id in anime_tv_list:
-            anime_df[anime_df['anime_id'] == user_anime_id]['Genres']
-    """
-    # print(type(anime_df['anime_id']))
+            for user_anime_genre in str(list(anime_df[anime_df['anime_id'] == user_anime_id]['Genres'])[0]).split(", "):
+                total_user_anime_genres[user_anime_genre] += 1
+                print(user_anime_genre + ": " + str(total_user_anime_genres[user_anime_genre]))
+    
+    print(json.dumps(total_user_anime_genres))
 
+    sum = 0
+    for key in list(total_user_anime_genres.keys()):
+        sum += total_user_anime_genres[key]
 
+    print(sum)
+
+    return total_user_anime_genres
 
 get_anime_list_genres(get_anime_list("holesumname"))
