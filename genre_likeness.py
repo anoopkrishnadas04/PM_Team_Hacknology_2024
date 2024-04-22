@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import get_anime_list
 anime_df = pd.read_csv('anime-dataset-2023.csv')
 
 # Split genres and create a list of all genres excluding the specified ones
@@ -25,15 +26,20 @@ for genre in genres_tv:
     
 # Create a heatmap
 corr_matrix_tv = binary_matrix_tv.corr()
-user_genres = ['Drama', 'Comedy', 'Award Winning']
+
+
+user_genres = get_anime_list.get_anime_list_genres(get_anime_list.get_anime_list("TheYellowInvader"))
+sum = 0
+for key in list(user_genres.keys()):
+    sum += user_genres[key]
 def add_genre_score(genres): 
     #assuming i have a list of the genres that I need to check
     count = 0
     target_anime_genres = genres.split(', ')
-    for x in user_genres:
+    for x in user_genres.keys():
         for y in target_anime_genres:
             #you can add the weight values in at this point by just multipling the value of corr_matrix_tv by the weight
-            count += corr_matrix_tv[x][y]#(corr_matrix_tv[x][y]*dict[x]/totalHits)
+            count += (corr_matrix_tv[x][y]*user_genres[x]/sum)
     return str(1 + count)
 
 tv_anime_df['genre likeness'] = tv_anime_df['Genres'].apply(add_genre_score)
