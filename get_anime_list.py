@@ -117,13 +117,12 @@ def get_anime_list_genres(anime_df, id_arr):
     for genre in str(list(anime_df[anime_df['anime_id'] == 31646]['Genres'])[0]).split(", "):
         print(genre)
     """
-
     
     for user_anime_id in id_arr:
         if user_anime_id in anime_tv_list:
             for user_anime_genre in str(list(anime_df[anime_df['anime_id'] == user_anime_id]['Genres'])[0]).split(", "):
                 total_user_anime_genres[user_anime_genre] += 1
-                print(user_anime_genre + ": " + str(total_user_anime_genres[user_anime_genre]))
+                #print(user_anime_genre + ": " + str(total_user_anime_genres[user_anime_genre]))
     
     #print(json.dumps(total_user_anime_genres))
 
@@ -135,4 +134,4 @@ def get_anime_list_genres(anime_df, id_arr):
 
     return total_user_anime_genres
 
-get_anime_list_genres(get_anime_list("holesumname"))
+#get_anime_list_genres(get_anime_list("holesumname"))

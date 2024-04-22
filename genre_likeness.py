@@ -40,9 +40,9 @@ def compute_genre_likeness(anime_df, id_arr):
             for y in target_anime_genres:
                 #you can add the weight values in at this point by just multipling the value of corr_matrix_tv by the weight
                 count += (corr_matrix_tv[x][y]*user_genres[x]/sum)
-        return str(1 + count)
+        return 1 + count
 
     anime_df['genre likeness'] = anime_df['Genres'].apply(add_genre_score)
-    print(anime_df.sort_values(by='genre likeness', ascending=False).head())
+    #print(anime_df.sort_values(by='genre likeness', ascending=False).head())
 
     return anime_df

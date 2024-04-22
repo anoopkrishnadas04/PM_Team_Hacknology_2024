@@ -12,7 +12,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
-"""
 ###########################################################
 #create the dataframe based off of the csv
 anime_df = pd.read_csv('anime-dataset-2023.csv')
@@ -77,32 +76,4 @@ anime_df.drop('rating_count', axis=1, inplace=True)
 anime_df['newScore'] = anime_df['newScore'].fillna(0)
 anime_df['newScore'] = pd.to_numeric(anime_df['newScore'], errors='coerce')
 print("calculated new scores")
-"""
-anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
-
-####################################### CODE NEEDS TO BE WRITTEN
-#user chooses whether they would like to get movies, shows, or both
-user_input = 'TV'
-anime_df = t.update_df_by_type(anime_df, user_input)
-print("data frame updated to be specifically one type")
-
-####################################### CODE NEEDS TO BE WRITTEN
-#User MAL is inputted, as of now it will only be functional with a user MAL
-username = "holesumname"#sample input
-#generating a list of all of the anime ids of watched anime
-id_arr = gal.get_anime_list(username)
-anime_df = anime_df = gl.compute_genre_likeness(anime_df, id_arr)
-print("genre likeness calculated")
-########################################    
-#key word analysis goes here
-
-######################################## CODE NEEDS TO BE WRITTEN
-anime_df = lp.apply_length_difference(anime_df, id_arr)
-print(anime_df.sort_values(by='genre likeness', ascending=False).head())
-
-######################################## CODE NEEDS TO BE WRITTEN
-#final likeness score is calculated
-
-######################################## CODE NEEDS TO BE WRITTEN
-#the data frame is then returned to the user in order of score and similairity
-
+anime_df.to_csv('updated-anime-dataset-2023.csv', index=False)
