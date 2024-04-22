@@ -26,7 +26,7 @@ std_episodes_tv = tv_anime_df['Episodes'].std()
 print(median_episodes_tv)
 print(mean_episodes_tv)
 print(std_episodes_tv)
-#Create Box and whisker Plot of data. Helps Visualize
+#Create Box and whisker Plot of data Helps Visualize
 plt.figure(figsize=(10, 6))
 tv_anime_df.boxplot(column='Episodes', by='Type', grid=False, vert=False)
 plt.xlabel('Type of Anime')

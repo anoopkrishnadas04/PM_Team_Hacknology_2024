@@ -74,9 +74,7 @@ def get_anime_list(username_input):
     return id_arr
 
 
-def get_anime_list_genres(id_arr):
-    anime_df = pd.read_csv('anime-dataset-2023.csv')
-
+def get_anime_list_genres(anime_df, id_arr):
 
     # Split genres and create a list of all genres excluding the specified ones
     anime_df = anime_df[~anime_df['Genres'].str.contains('Ecchi|Hentai|Erotica')]
@@ -127,13 +125,13 @@ def get_anime_list_genres(id_arr):
                 total_user_anime_genres[user_anime_genre] += 1
                 print(user_anime_genre + ": " + str(total_user_anime_genres[user_anime_genre]))
     
-    print(json.dumps(total_user_anime_genres))
+    #print(json.dumps(total_user_anime_genres))
 
     sum = 0
     for key in list(total_user_anime_genres.keys()):
         sum += total_user_anime_genres[key]
 
-    print(sum)
+    #print(sum)
 
     return total_user_anime_genres
 
