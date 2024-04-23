@@ -17,7 +17,7 @@ def get_anime_list(username_input):
     id_arr = []
 
     while(flag):
-        url = f'https://api.myanimelist.net/v2/users/{username}/animelist?fields=limit=1000&offset=' + str(x)
+        url = f'https://api.myanimelist.net/v2/users/{username}/animelist?fields=limit=1000&sort=list_score&status=watching&status=completed&offset=' + str(x)
         #calling the MyAnimeList API
         response = requests.get(url, headers = {
             'X-MAL-CLIENT-ID': CLIENT_ID

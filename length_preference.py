@@ -13,7 +13,7 @@ def apply_length_difference(anime_df, id_arr):
     sum = round(sum/count)
     def calc_score_difference(score):
         score = abs(int(score) - sum)
-        return 1 - (score/4)/6
+        return 1 - (score/4)/8
     anime_df['lengthLikeness'] = anime_df['episodeScore'].apply(calc_score_difference)
     return anime_df
 
