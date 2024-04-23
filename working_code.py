@@ -96,13 +96,16 @@ print("genre likeness calculated")
 ########################################    
 #key word analysis goes here
 
-######################################## CODE NEEDS TO BE WRITTEN
+########################################
 anime_df = lp.apply_length_difference(anime_df, id_arr)
-print(anime_df.sort_values(by='genre likeness', ascending=False).head())
+
 
 ######################################## CODE NEEDS TO BE WRITTEN
-#final likeness score is calculated
-
+#as of now the likeness score is calculated by the genre likeness, the length likeness, and soon to be the keyword analysis
+#keyword analysis returns a perentage of similairity whilst length likeness is an integer value between 0 and 4 with lower 
+#values being better, and genre likeness is returned as a percentage
+anime_df = anime_df.assign(final_likeness = lambda x: (x['newScore']*x['genre likeness']*x['lengthLikeness']))
+print(anime_df.sort_values(by='newScore', ascending=False).head())
 ######################################## CODE NEEDS TO BE WRITTEN
 #the data frame is then returned to the user in order of score and similairity
 

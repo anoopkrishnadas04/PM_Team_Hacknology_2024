@@ -1,8 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
-import get_anime_list
 
 def apply_length_difference(anime_df, id_arr):
     anime_list = list(anime_df['anime_id'])
@@ -16,7 +13,7 @@ def apply_length_difference(anime_df, id_arr):
     sum = round(sum/count)
     def calc_score_difference(score):
         score = abs(int(score) - sum)
-        return score
+        return 1 - (score/4)/6
     anime_df['lengthLikeness'] = anime_df['episodeScore'].apply(calc_score_difference)
     return anime_df
 

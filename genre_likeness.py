@@ -2,8 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-import get_anime_list
-anime_df = pd.read_csv('anime-dataset-2023.csv')
+import get_anime_list as gal
 def compute_genre_likeness(anime_df, id_arr):
     # Split genres and create a list of all genres excluding the specified ones
     anime_df = anime_df[~anime_df['Genres'].str.contains('Ecchi|Hentai|Erotica')]
@@ -28,7 +27,7 @@ def compute_genre_likeness(anime_df, id_arr):
     corr_matrix_tv = binary_matrix.corr()
 
     
-    user_genres = get_anime_list.get_anime_list_genres(anime_df, id_arr)
+    user_genres = gal.get_anime_list_genres(anime_df, id_arr)
     sum = 0
     for key in list(user_genres.keys()):
         sum += user_genres[key]
@@ -40,7 +39,7 @@ def compute_genre_likeness(anime_df, id_arr):
             for y in target_anime_genres:
                 #you can add the weight values in at this point by just multipling the value of corr_matrix_tv by the weight
                 count += (corr_matrix_tv[x][y]*user_genres[x]/sum)
-        return 1 + count
+        return count
 
     anime_df['genre likeness'] = anime_df['Genres'].apply(add_genre_score)
     #print(anime_df.sort_values(by='genre likeness', ascending=False).head())
