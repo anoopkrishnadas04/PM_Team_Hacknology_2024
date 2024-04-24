@@ -36,16 +36,29 @@ def keyword_analysis(pop_df, anime_df):
         # If not, check if the user input matches any entry in the 'English name' column
         elif user_input_title in anime_df['English name'].values:
             return anime_df.loc[anime_df['English name'] == user_input_title, 'Synopsis'].values[0]
+        elif anime_df['Name'].values.contains(user_input_title):
+            return anime_df.loc[anime_df['Name'].str.contains(user_input_title), 'Synopsis'].values[0]
         # If neither 'Name' nor 'English name' matches, print "not in list"
         else:
             print("not in list")
 
     def get_anime_id(show_name):
+        print(str(anime_df['Name'].values))
         if show_name in anime_df['Name'].values:
             row = anime_df.loc[anime_df['Name'] == show_name]
             return row.iloc[0]['anime_id']
+        #
+        elif show_name in str(anime_df['Name'].values):
+            filter_anime_df = anime_df['Name'].str.contains(show_name)
+            row = filter_anime_df.iloc[0]
+            return row.iloc[0]['anime_id']
         elif show_name in anime_df['English name'].values:
             row = anime_df.loc[anime_df['English name'] == show_name]
+            return row.iloc[0]['anime_id']
+        #
+        elif show_name in str(anime_df['English name'].values):
+            filter_anime_df = anime_df['English name'].str.contains(show_name)
+            row = filter_anime_df.iloc[0]
             return row.iloc[0]['anime_id']
         else:
             return None
