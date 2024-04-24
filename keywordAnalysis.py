@@ -3,6 +3,7 @@ from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
 def keyword_analysis(pop_df, anime_df):
+    anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
     pop_df = pop_df
     # Preprocess the synopses
     synopses_tv = pop_df['Synopsis'].values.astype('U')  # Convert synopses to Unicode
@@ -42,11 +43,9 @@ def keyword_analysis(pop_df, anime_df):
     def get_anime_id(show_name):
         if show_name in anime_df['Name'].values:
             row = anime_df.loc[anime_df['Name'] == show_name]
-        if not row.empty:
             return row.iloc[0]['anime_id']
         elif show_name in anime_df['English name'].values:
             row = anime_df.loc[anime_df['English name'] == show_name]
-        if not row.empty:
             return row.iloc[0]['anime_id']
         else:
             return None
@@ -57,7 +56,8 @@ def keyword_analysis(pop_df, anime_df):
     # Get user input for the favorite TV show
     user_favorite_title = input("Enter the title of your favorite TV show: ")
 
-
+    while(get_anime_id(user_favorite_title) == None):
+        user_favorite_title = input("Please try again: ")
     # Get the anime_id of the user's favorite show
     anime_id = get_anime_id(user_favorite_title)
 
@@ -67,6 +67,7 @@ def keyword_analysis(pop_df, anime_df):
         user_favorite_title = pop_df.loc[user_favorite_index, 'Name']  # Get the name of the user's favorite show in pop_df
 
     # Preprocess the user's favorite show synopsis
+ 
     user_favorite_synopsis_tv = preprocess_user_input(user_favorite_title, anime_df)
 
     # Convert the user's favorite show synopsis into bag-of-words format
@@ -83,7 +84,7 @@ def keyword_analysis(pop_df, anime_df):
     pop_df['keywordScore'] = sims_tv
 
     # Sort pop_df by similarity scores
-    pop_df = pop_df.sort_values(by='keywordScore', ascending=False)
+    #pop_df = pop_df.sort_values(by='keywordScore', ascending=False)
 
     
     return pop_df

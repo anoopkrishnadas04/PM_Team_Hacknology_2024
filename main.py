@@ -38,7 +38,7 @@ def get_anime_recs(username):
     #values being better, and genre likeness is returned as a percentage
     anime_df = anime_df.assign(final_likeness = lambda x: (x['newScore']*x['genre likeness']*x['lengthLikeness']))
     anime_df = anime_df.sort_values(by='final_likeness', ascending=False)
-    filter_anime_df = anime_df.head(750)
+    filter_anime_df = anime_df.head(5000)
 
     filter_anime_df = ka.keyword_analysis(filter_anime_df, anime_df)
 
@@ -46,7 +46,7 @@ def get_anime_recs(username):
         return 1 - (pop/50000)
 
     filter_anime_df['popScore'] = filter_anime_df['Popularity'].apply(apply_pop)
-    filter_anime_df = filter_anime_df.assign(final_likeness = lambda x: x['final_likeness']*x['popScore'])
+    filter_anime_df = filter_anime_df.assign(final_likeness = lambda x: x['final_likeness']*x['popScore']*x['keywordScore'])
     filter_anime_df = filter_anime_df.drop(['Other name'], axis = 1)
 
     print(filter_anime_df.sort_values(by='final_likeness', ascending=False).head(10))
