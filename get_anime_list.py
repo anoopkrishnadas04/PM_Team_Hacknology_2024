@@ -22,10 +22,19 @@ def get_anime_list(username_input):
         response = requests.get(url, headers = {
             'X-MAL-CLIENT-ID': CLIENT_ID
         })
-
-        response.raise_for_status()
-        anime = response.json()
-        response.close()
+        try:
+            response.raise_for_status()
+            anime = response.json()
+            response.close()
+        except requests.exceptions.HTTPError as errh:
+            username = input('please try to re-type your username, or enter another: ')
+            continue
+        except requests.exceptions.ConnectionError as errc:
+            return "An Error Connecting to the API occurred:" + repr(errc)
+        except requests.exceptions.Timeout as errt:
+            return "A Timeout Error occurred:" + repr(errt)
+        except requests.exceptions.RequestException as err:
+            return "An Unknown Error occurred" + repr(err)
         
         if(anime['data'] == []):
             flag = False
