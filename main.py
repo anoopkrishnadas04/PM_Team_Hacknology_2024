@@ -3,7 +3,7 @@ import type_isolation as t
 import genre_likeness as gl
 import get_anime_list as gal
 import length_preference as lp
-def get_anime_recs():
+def get_anime_recs(username):
     anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
 
     ####################################### CODE NEEDS TO BE WRITTEN
@@ -14,31 +14,32 @@ def get_anime_recs():
 
     ####################################### CODE NEEDS TO BE WRITTEN
     #User MAL is inputted, as of now it will only be functional with a user MAL
-    username = "TheYellowInvader"#sample input
+    #username = "holesumname"#sample input
     #generating a list of all of the anime ids of watched anime
     id_arr = gal.get_anime_list(username)
     anime_df = anime_df = gl.compute_genre_likeness(anime_df, id_arr)
     print("genre likeness calculated")
-    ########################################    
-    #key word analysis goes here
+
 
     ########################################
     anime_df = lp.apply_length_difference(anime_df, id_arr)
 
+    ########################################    
+    #key word analysis goes here
+
     ########################################
     #filter out anime the user has already watched
     anime_df = anime_df[~anime_df['anime_id'].isin(id_arr)]
-
 
     ######################################## CODE NEEDS TO BE WRITTEN
     #as of now the likeness score is calculated by the genre likeness, the length likeness, and soon to be the keyword analysis
     #keyword analysis returns a perentage of similairity whilst length likeness is an integer value between 0 and 4 with lower 
     #values being better, and genre likeness is returned as a percentage
     anime_df = anime_df.assign(final_likeness = lambda x: (x['newScore']*x['genre likeness']*x['lengthLikeness']))
-    filter_anime_df = anime_df.sort_values(by='final_likeness', ascending=False).head(500)
+    filter_anime_df = anime_df.sort_values(by='final_likeness', ascending=False).head(750)
 
     def apply_pop(pop):
-        return 1 - (pop/25000)
+        return 1 - (pop/50000)
 
     filter_anime_df['popScore'] = filter_anime_df['Popularity'].apply(apply_pop)
     filter_anime_df = filter_anime_df.assign(final_likeness = lambda x: x['final_likeness']*x['popScore'])
@@ -48,4 +49,4 @@ def get_anime_recs():
     ######################################## CODE NEEDS TO BE WRITTEN
     #the data frame is then returned to the user in order of score and similairity
     return(anime_df)
-get_anime_recs()
+get_anime_recs("holesumname")

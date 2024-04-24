@@ -24,15 +24,15 @@ print("Reading the dataframe")
 anime_df['Episodes'] = pd.to_numeric(anime_df['Episodes'], errors='coerce') #Converts all values from str -> float64
 def assign_episode_score(Episodes):
     if Episodes == 1:
-        return 0
-    elif Episodes <= 26:
         return 1
-    elif Episodes <= 52:
+    elif Episodes <= 26:
         return 2
-    elif Episodes <= 80:
+    elif Episodes <= 52:
         return 3
-    else:
+    elif Episodes <= 80:
         return 4
+    else:
+        return 5
 
 # Add new column 'episodeScore' based on 'episodes' column
 anime_df['episodeScore'] = anime_df['Episodes'].apply(assign_episode_score)

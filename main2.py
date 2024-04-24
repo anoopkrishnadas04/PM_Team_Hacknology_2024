@@ -8,7 +8,7 @@ from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
 
-
+#written (almost) entirely by Alex 
 anime_df = pd.read_csv('anime-dataset-2023.csv')
 
 

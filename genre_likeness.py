@@ -1,13 +1,10 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
 import get_anime_list as gal
 def compute_genre_likeness(anime_df, id_arr):
     # Split genres and create a list of all genres excluding the specified ones
     anime_df = anime_df[~anime_df['Genres'].str.contains('Ecchi|Hentai|Erotica')]
 
-    all_genres = anime_df['Genres'].str.split(', ').explode()
+    #all_genres = anime_df['Genres'].str.split(', ').explode()
 
     #tv_anime_df = anime_df[anime_df['Type'] == 'TV'] #Include only TV data as to not skew results
 
