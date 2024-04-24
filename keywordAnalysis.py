@@ -82,15 +82,12 @@ def keyword_analysis(pop_df, anime_df):
     # Get the indices of the most similar shows
     similar_show_indices_tv = sorted(enumerate(sims_tv), key=lambda item: -item[1])
 
-    # Recommend similar shows
-    # Exclude the user's favorite show from the recommended similar shows
-    # Ensure that the recommended similar shows are from pop_df
-    similar_shows_tv = [(pop_df.iloc[idx]['anime_id'], pop_df.iloc[idx]['Name'], sim) for idx, sim in similar_show_indices_tv if pop_df.iloc[idx]['Name'] != user_favorite_title]
-    ################################
-    #we need to write a function to add the similairty score to the pop_df dataframe and then return that
-    
+     # Add similarity scores to pop_df
+    pop_df['keywordScore'] = sims_tv
 
+    # Sort pop_df by similarity scores
+    pop_df = pop_df.sort_values(by='keywordScore', ascending=False)
+
+    
     return pop_df
-    # Print the recommended similar shows line by line
-    for i, (show_id, show_name, similarity) in enumerate(similar_shows_tv[:10], start=1):  # Adjust the number of recommended shows as needed
-        print(f"{i}. ID: {show_id}, Name: {show_name}, Similarity Score: {similarity}")
+   
