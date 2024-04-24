@@ -4,14 +4,6 @@ import genre_likeness as gl
 import get_anime_list as gal
 import length_preference as lp
 
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from gensim.corpora import Dictionary
-from gensim.models import LdaModel
-from gensim.similarities import MatrixSimilarity
 ###########################################################
 #create the dataframe based off of the csv
 anime_df = pd.read_csv('anime-dataset-2023.csv')
