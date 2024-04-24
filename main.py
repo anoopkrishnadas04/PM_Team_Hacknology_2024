@@ -3,6 +3,7 @@ import type_isolation as t
 import genre_likeness as gl
 import get_anime_list as gal
 import length_preference as lp
+import keywordAnalysis as ka
 def get_anime_recs(username):
     anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
 
@@ -36,7 +37,10 @@ def get_anime_recs(username):
     #keyword analysis returns a perentage of similairity whilst length likeness is an integer value between 0 and 4 with lower 
     #values being better, and genre likeness is returned as a percentage
     anime_df = anime_df.assign(final_likeness = lambda x: (x['newScore']*x['genre likeness']*x['lengthLikeness']))
-    filter_anime_df = anime_df.sort_values(by='final_likeness', ascending=False).head(750)
+    anime_df = anime_df.sort_values(by='final_likeness', ascending=False)
+    filter_anime_df = anime_df.head(750)
+
+    filter_anime_df = ka.keyword_analysis(filter_anime_df, anime_df)
 
     def apply_pop(pop):
         return 1 - (pop/50000)
