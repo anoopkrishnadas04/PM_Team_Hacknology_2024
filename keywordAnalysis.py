@@ -79,9 +79,6 @@ def keyword_analysis(pop_df, anime_df):
     index_tv = MatrixSimilarity(lda_model_tv[corpus_tv])
     sims_tv = index_tv[user_favorite_topic_distribution_tv]
 
-    # Get the indices of the most similar shows
-    similar_show_indices_tv = sorted(enumerate(sims_tv), key=lambda item: -item[1])
-
      # Add similarity scores to pop_df
     pop_df['keywordScore'] = sims_tv
 
