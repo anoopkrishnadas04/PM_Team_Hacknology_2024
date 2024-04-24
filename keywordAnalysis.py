@@ -2,8 +2,10 @@ import pandas as pd
 from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
-def keyword_analysis(pop_df, anime_df):
+def keyword_analysis(pop_df):
+    anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
     pop_df = pop_df
+    print(anime_df.head())
     # Preprocess the synopses
     synopses_tv = pop_df['Synopsis'].values.astype('U')  # Convert synopses to Unicode
 
@@ -28,7 +30,7 @@ def keyword_analysis(pop_df, anime_df):
                             passes=10)  # Number of passes through the corpus during training
 
     # Function to preprocess user input
-    def preprocess_user_input(user_input_title, pop_df):
+    def preprocess_user_input(user_input_title, anime_df):
         # Check if the user input matches any entry in the 'Name' column
         if user_input_title in anime_df['Name'].values:
             return anime_df.loc[anime_df['Name'] == user_input_title, 'Synopsis'].values[0]
@@ -42,11 +44,9 @@ def keyword_analysis(pop_df, anime_df):
     def get_anime_id(show_name):
         if show_name in anime_df['Name'].values:
             row = anime_df.loc[anime_df['Name'] == show_name]
-        if not row.empty:
             return row.iloc[0]['anime_id']
         elif show_name in anime_df['English name'].values:
             row = anime_df.loc[anime_df['English name'] == show_name]
-        if not row.empty:
             return row.iloc[0]['anime_id']
         else:
             return None
@@ -90,7 +90,7 @@ def keyword_analysis(pop_df, anime_df):
     #we need to write a function to add the similairty score to the pop_df dataframe and then return that
     
 
-    return pop_df
+    #return pop_df
     # Print the recommended similar shows line by line
     for i, (show_id, show_name, similarity) in enumerate(similar_shows_tv[:10], start=1):  # Adjust the number of recommended shows as needed
         print(f"{i}. ID: {show_id}, Name: {show_name}, Similarity Score: {similarity}")
