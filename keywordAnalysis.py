@@ -2,7 +2,8 @@ import pandas as pd
 from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
-def keyword_analysis(pop_df, anime_df):
+
+def keyword_analysis(pop_df, anime_df, fav_tv_show):
     anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
     pop_df = pop_df
     # Preprocess the synopses
@@ -43,7 +44,7 @@ def keyword_analysis(pop_df, anime_df):
             print("not in list")
 
     def get_anime_id(show_name):
-        print(str(anime_df['Name'].values))
+        #print(str(anime_df['Name'].values))
         if show_name in anime_df['Name'].values:
             row = anime_df.loc[anime_df['Name'] == show_name]
             return row.iloc[0]['anime_id']
@@ -67,7 +68,8 @@ def keyword_analysis(pop_df, anime_df):
 
 
     # Get user input for the favorite TV show
-    user_favorite_title = input("Enter the title of your favorite TV show: ")
+    #user_favorite_title = input("Enter the title of your favorite TV show: ")
+    user_favorite_title = fav_tv_show
 
     while(get_anime_id(user_favorite_title) == None):
         user_favorite_title = input("Please try again: ")
