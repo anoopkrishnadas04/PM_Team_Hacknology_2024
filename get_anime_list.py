@@ -26,6 +26,7 @@ def get_anime_list(username_input):
             response.raise_for_status()
             anime = response.json()
             response.close()
+        #verifying that the API call has suceeded
         except requests.exceptions.HTTPError as errh:
             username = input('please try to re-type your username, or enter another: ')
             continue
@@ -36,6 +37,7 @@ def get_anime_list(username_input):
         except requests.exceptions.RequestException as err:
             return "An Unknown Error occurred" + repr(err)
         
+        #determining if we have finished returning the users anime list due to pagination
         if(anime['data'] == []):
             flag = False
             break
@@ -75,10 +77,8 @@ def get_anime_list(username_input):
 
 
             df = pd.concat([df, df_alt], ignore_index=True)
-        #print(x)
+
         x += 10
-    # print(df)
-    # print(df['title'])
 
     return id_arr
 
@@ -118,29 +118,16 @@ def get_anime_list_genres(anime_df, id_arr):
     }
 
     x = 1
-
-    #for anime_id in anime_df['anime_id'].items():
-    #    print(anime_id)
-    
-    """
-    for genre in str(list(anime_df[anime_df['anime_id'] == 31646]['Genres'])[0]).split(", "):
-        print(genre)
-    """
     
     for user_anime_id in id_arr:
         if user_anime_id in anime_tv_list:
             for user_anime_genre in str(list(anime_df[anime_df['anime_id'] == user_anime_id]['Genres'])[0]).split(", "):
                 total_user_anime_genres[user_anime_genre] += 1
-                #print(user_anime_genre + ": " + str(total_user_anime_genres[user_anime_genre]))
     
-    #print(json.dumps(total_user_anime_genres))
 
     sum = 0
     for key in list(total_user_anime_genres.keys()):
         sum += total_user_anime_genres[key]
 
-    #print(sum)
 
     return total_user_anime_genres
-
-#get_anime_list_genres(get_anime_list("holesumname"))

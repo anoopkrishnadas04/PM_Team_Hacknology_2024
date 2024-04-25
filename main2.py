@@ -9,6 +9,8 @@ from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
 
 #written (almost) entirely by Alex 
+#this file is redundant but it shows the math that allowed us to create this project so it will remain
+#in the repository as to show the though process that allowed us to determine what values to use
 anime_df = pd.read_csv('anime-dataset-2023.csv')
 
 
