@@ -5,6 +5,7 @@ import get_anime_list as gal
 import length_preference as lp
 import keywordAnalysis as ka
 import math
+import json
 
 def get_anime_recs(username):
     #######################################
@@ -70,4 +71,22 @@ def get_anime_recs(username):
     ######################################## 
     #the data frame is returned to the user in order of score and similairity
     return(filter_anime_df.sort_values(by='final_likeness', ascending=False))
-get_anime_recs("holesumname")
+#get_anime_recs("holesumname")
+
+def get_anime_recs_formatted(username, fav_tv_show):
+    temp_df = get_anime_recs(username, fav_tv_show)
+
+    top_anime_recs = []
+    for i in range(10):
+        index = temp_df['Name'].index[i]
+        top_anime_recs.append(
+            {
+                "anime_actual_rank":    int(i),
+                "name":                 str(temp_df["Name"][index]),
+                "english_name":         str(temp_df["English name"][index]),
+                "anime_id":             int(temp_df["anime_id"][index]),
+                "score":                float(temp_df["Score"][index]),
+                "genres":               list(str(temp_df["Genres"][index]).split(", "))
+            }
+        )
+    return top_anime_recs
