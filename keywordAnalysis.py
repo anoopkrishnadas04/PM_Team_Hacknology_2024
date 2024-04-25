@@ -3,50 +3,8 @@ import re
 from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
-def keyword_analysis(pop_df, anime_df):
-    #opening the original dataset as for processing purposes the original dataframe has filtered out
-    #all shows the user has already watched, which would make it impossible to access synopsis of 
-    #users favorite show
-    anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
-    #solves a random error
-    pop_df = pop_df
 
-    # Preprocess the synopses
-    synopses_tv = pop_df['Synopsis'].values.astype('U')  # Convert synopses to Unicode
-
-    # Tokenize the synopses
-    tokenized_synopses_tv = [synopsis.split() for synopsis in synopses_tv]
-
-    # Create a dictionary representation of the synopses
-    dictionary_tv = Dictionary(tokenized_synopses_tv)
-
-    # Filter out tokens that appear in less than 10 documents or more than 50% of the documents
-    dictionary_tv.filter_extremes(no_below=10, no_above=0.5)
-
-    # Convert the tokenized synopses into bag-of-words format
-    corpus_tv = [dictionary_tv.doc2bow(synopsis) for synopsis in tokenized_synopses_tv]
-    print("beginning analysis")
-
-    # Build the LDA model
-    lda_model_tv = LdaModel(corpus=corpus_tv,
-                            id2word=dictionary_tv,
-                            num_topics= 5,  # Specify the number of topics Default val = 5
-                            random_state=42,
-                            passes= 10)  # Number of passes through the corpus during training default val=10
-
-    # Function to preprocess user input - redundant- I would like to remove this function
-    def preprocess_user_input(user_input_title, pop_df):
-        # Check if the user input matches any entry in the 'Name' column
-        if user_input_title in anime_df['Name'].values:
-            return anime_df.loc[anime_df['Name'] == user_input_title, 'Synopsis'].values[0]
-        # If not, check if the user input matches any entry in the 'English name' column
-        elif user_input_title in anime_df['English name'].values:
-            return anime_df.loc[anime_df['English name'] == user_input_title, 'Synopsis'].values[0]
-        # If neither 'Name' nor 'English name' matches, print "not in list"
-        else:
-            print("not in list")
-
-    def get_anime_id(show_name):
+def get_anime_id(anime_df,show_name):
         flag = True
         while flag:
             #turning the show name into regex pattern
@@ -89,21 +47,61 @@ def keyword_analysis(pop_df, anime_df):
                 show_name = input("That name didn't come up in our list, please try again: ")
                 continue
             else:
+                show_name = input("That name didn't come up in our list, please try again: ")
+                continue
 
-                return None
+def keyword_analysis(pop_df, anime_df, anime_id):
+    #opening the original dataset as for processing purposes the original dataframe has filtered out
+    #all shows the user has already watched, which would make it impossible to access synopsis of 
+    #users favorite show
+    anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
+    #solves a random error
+    pop_df = pop_df
+
+    # Preprocess the synopses
+    synopses_tv = pop_df['Synopsis'].values.astype('U')  # Convert synopses to Unicode
+
+    # Tokenize the synopses
+    tokenized_synopses_tv = [synopsis.split() for synopsis in synopses_tv]
+
+    # Create a dictionary representation of the synopses
+    dictionary_tv = Dictionary(tokenized_synopses_tv)
+
+    # Filter out tokens that appear in less than 10 documents or more than 50% of the documents
+    dictionary_tv.filter_extremes(no_below=10, no_above=0.5)
+
+    # Convert the tokenized synopses into bag-of-words format
+    corpus_tv = [dictionary_tv.doc2bow(synopsis) for synopsis in tokenized_synopses_tv]
+    print("beginning analysis")
+
+    # Build the LDA model
+    lda_model_tv = LdaModel(corpus=corpus_tv,
+                            id2word=dictionary_tv,
+                            num_topics= 5,  # Specify the number of topics Default val = 5
+                            random_state=42,
+                            passes= 10)  # Number of passes through the corpus during training default val=10
+
+    # Function to preprocess user input - redundant- I would like to remove this function
+    def preprocess_user_input(user_input_title, pop_df):
+        # Check if the user input matches any entry in the 'Name' column
+        if user_input_title in anime_df['Name'].values:
+            return anime_df.loc[anime_df['Name'] == user_input_title, 'Synopsis'].values[0]
+        # If not, check if the user input matches any entry in the 'English name' column
+        elif user_input_title in anime_df['English name'].values:
+            return anime_df.loc[anime_df['English name'] == user_input_title, 'Synopsis'].values[0]
+        # If neither 'Name' nor 'English name' matches, print "not in list"
+        else:
+            print("not in list")
+
+    
 
 
 
 
-    # Get user input for the favorite TV show
-    user_favorite_title = input("Enter the title of your favorite TV show: ")
-
-    #if the user enters something that isn't atleast a partial match
-    #then this will reprompt them
-    while((get_anime_id(user_favorite_title) == None)):
-            user_favorite_title = input("That name didn't come up in our list, please try again: ")
-    # Get the anime_id of the user's favorite show
-    anime_id = get_anime_id(user_favorite_title)
+    # Get user input for the favorite TV show#################################################
+    #user_favorite_title = input("Enter the title of your favorite TV show: ")################
+##############################################################################################
+    #anime_id = get_anime_id(user_favorite_title)#############################################
 
     # Check if the user's favorite show is in pop_df - redundant, would like to remove
     if anime_id in pop_df['anime_id'].values:

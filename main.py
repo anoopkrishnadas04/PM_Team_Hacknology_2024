@@ -23,7 +23,9 @@ def get_anime_recs(username):
     #username = "holesumname"#sample input
     #generating a list of all of the anime ids of watched anime
     id_arr = gal.get_anime_list(username)
-    anime_df = anime_df = gl.compute_genre_likeness(anime_df, id_arr)
+    user_favorite_title = input("Enter the title of your favorite TV show: ")
+    favorite_anime_id = ka.get_anime_id(anime_df, user_favorite_title)
+    anime_df = anime_df = gl.compute_genre_likeness(anime_df, id_arr, favorite_anime_id)
     print("genre likeness calculated")
 
 
@@ -46,7 +48,7 @@ def get_anime_recs(username):
 
     ########################################
     #this is where keyword analysis takes place on the top 5000? anime based on similairity score
-    filter_anime_df = ka.keyword_analysis(filter_anime_df, anime_df)
+    filter_anime_df = ka.keyword_analysis(filter_anime_df, anime_df, favorite_anime_id)
 
      ########################################
      #here we are applying a popularity score to make sure that recommendations return anime the user
