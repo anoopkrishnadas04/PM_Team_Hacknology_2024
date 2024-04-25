@@ -1,8 +1,13 @@
 import pandas as pd
 import get_anime_list as gal
-def compute_genre_likeness(anime_df, id_arr):
+def compute_genre_likeness(anime_df, id_arr, user_anime_id):
     # Split genres and create a list of all genres excluding the specified ones
     anime_df = anime_df[~anime_df['Genres'].str.contains('Ecchi|Hentai|Erotica')]
+
+
+    # split the genres of the users favorite anime and then add them to the waiting
+
+    favorite_anime_genres = anime_df[anime_df['anime_id'] == user_anime_id]['Genres'].values[0].split(',')
 
     # Create a list of unique genres
     genres_tv = anime_df['Genres'].str.split(', ').explode().unique()
@@ -23,7 +28,12 @@ def compute_genre_likeness(anime_df, id_arr):
     #determing the total number of genres in the dictionary
     for key in list(user_genres.keys()):
         sum += user_genres[key]
-
+    for key in list(user_genres.keys()):
+        if key in favorite_anime_genres:
+            user_genres[key] += sum*.25
+    sum = 0
+    for key in list(user_genres.keys()):
+        sum += user_genres[key]
     #adds the genre score to the dataframe based off of the weight of the user genres, 
     #calculated with the dictionary, and the genre coefficient
     def add_genre_score(genres): 
