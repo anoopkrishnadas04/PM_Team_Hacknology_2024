@@ -30,9 +30,9 @@ def keyword_analysis(pop_df, anime_df):
     # Build the LDA model
     lda_model_tv = LdaModel(corpus=corpus_tv,
                             id2word=dictionary_tv,
-                            num_topics= 5,  # Specify the number of topics
+                            num_topics= 5,  # Specify the number of topics Default val = 5
                             random_state=42,
-                            passes=10)  # Number of passes through the corpus during training
+                            passes= 10)  # Number of passes through the corpus during training default val=10
 
     # Function to preprocess user input - redundant- I would like to remove this function
     def preprocess_user_input(user_input_title, pop_df):
