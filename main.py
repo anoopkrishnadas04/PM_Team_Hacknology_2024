@@ -4,6 +4,7 @@ import genre_likeness as gl
 import get_anime_list as gal
 import length_preference as lp
 import keywordAnalysis as ka
+import math
 
 def get_anime_recs(username):
     #######################################
@@ -33,12 +34,13 @@ def get_anime_recs(username):
     ########################################
     #filter out anime the user has already watched
     anime_df = anime_df[~anime_df['anime_id'].isin(id_arr)]
-
+    
     ######################################## CODE NEEDS TO BE WRITTEN
     #as of now the likeness score is calculated by the genre likeness, the length likeness, and soon to be the keyword analysis
     #keyword analysis returns a perentage of similairity whilst length likeness is an integer value between 0 and 4 with lower 
     #values being better, and genre likeness is returned as a percentage
     anime_df = anime_df.assign(final_likeness = lambda x: (x['newScore']*x['genre likeness']*x['lengthLikeness']))
+    anime_df = anime_df[~anime_df['anime_id'].isin(gal.get_dropped_anime_list(username))]
     anime_df = anime_df.sort_values(by='final_likeness', ascending=False)
     filter_anime_df = anime_df.head(5000)
 
@@ -50,7 +52,7 @@ def get_anime_recs(username):
      #here we are applying a popularity score to make sure that recommendations return anime the user
      #would be interested in
     def apply_pop(pop):
-        return 1 - (pop/50000)
+        return 1 - (round((math.sqrt(pop)))/50000)
 
     filter_anime_df['popScore'] = filter_anime_df['Popularity'].apply(apply_pop)
 
@@ -60,6 +62,7 @@ def get_anime_recs(username):
     filter_anime_df = filter_anime_df.drop(['Other name'], axis = 1)
 
     #print statement for testing purposes
+    filter_anime_df = filter_anime_df.drop(['Name'], axis = 1)
     print(filter_anime_df.sort_values(by='final_likeness', ascending=False).head(10))
 
     ######################################## 
