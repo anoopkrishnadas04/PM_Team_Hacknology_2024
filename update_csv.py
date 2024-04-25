@@ -1,8 +1,4 @@
 import pandas as pd
-import type_isolation as t
-import genre_likeness as gl
-import get_anime_list as gal
-import length_preference as lp
 
 ###########################################################
 #create the dataframe based off of the csv
@@ -68,4 +64,5 @@ anime_df.drop('rating_count', axis=1, inplace=True)
 anime_df['newScore'] = anime_df['newScore'].fillna(0)
 anime_df['newScore'] = pd.to_numeric(anime_df['newScore'], errors='coerce')
 print("calculated new scores")
+# Writes the new scores into a csv so this code does not need to run every time we process a users MAL
 anime_df.to_csv('updated-anime-dataset-2023.csv', index=False)

@@ -4,12 +4,6 @@ def compute_genre_likeness(anime_df, id_arr):
     # Split genres and create a list of all genres excluding the specified ones
     anime_df = anime_df[~anime_df['Genres'].str.contains('Ecchi|Hentai|Erotica')]
 
-    #all_genres = anime_df['Genres'].str.split(', ').explode()
-
-    #tv_anime_df = anime_df[anime_df['Type'] == 'TV'] #Include only TV data as to not skew results
-
-    # Assuming anime_df is your DataFrame with a column named 'Genres'
-
     # Create a list of unique genres
     genres_tv = anime_df['Genres'].str.split(', ').explode().unique()
 
@@ -23,13 +17,16 @@ def compute_genre_likeness(anime_df, id_arr):
     # Create a heatmap
     corr_matrix_tv = binary_matrix.corr()
 
-    
+    # Calling a function to return the dictionary of user genres
     user_genres = gal.get_anime_list_genres(anime_df, id_arr)
     sum = 0
+    #determing the total number of genres in the dictionary
     for key in list(user_genres.keys()):
         sum += user_genres[key]
+
+    #adds the genre score to the dataframe based off of the weight of the user genres, 
+    #calculated with the dictionary, and the genre coefficient
     def add_genre_score(genres): 
-        #assuming i have a list of the genres that I need to check
         count = 0
         target_anime_genres = genres.split(', ')
         for x in user_genres.keys():
@@ -39,6 +36,5 @@ def compute_genre_likeness(anime_df, id_arr):
         return count
 
     anime_df['genre likeness'] = anime_df['Genres'].apply(add_genre_score)
-    #print(anime_df.sort_values(by='genre likeness', ascending=False).head())
 
     return anime_df
