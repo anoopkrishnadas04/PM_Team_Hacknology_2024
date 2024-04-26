@@ -71,7 +71,7 @@ def get_anime_recs(username):
     ######################################## 
     #the data frame is returned to the user in order of score and similairity
     return(filter_anime_df.sort_values(by='final_likeness', ascending=False))
-#get_anime_recs("holesumname")
+get_anime_recs("holesumname")
 
 def get_anime_recs_formatted(username, fav_tv_show):
     temp_df = get_anime_recs(username, fav_tv_show)
