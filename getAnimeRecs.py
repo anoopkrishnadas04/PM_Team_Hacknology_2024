@@ -7,7 +7,7 @@ import keywordAnalysis as ka
 import math
 import json
 
-def get_anime_recs(username):
+def get_anime_recs(username, fav_tv_show):
     #######################################
     #opening the updated csv that reflects our new scores
     anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
@@ -24,7 +24,7 @@ def get_anime_recs(username):
     #username = "holesumname"#sample input
     #generating a list of all of the anime ids of watched anime
     id_arr = gal.get_anime_list(username)
-    user_favorite_title = input("Enter the title of your favorite TV show: ")
+    user_favorite_title = fav_tv_show
     favorite_anime_id = ka.get_anime_id(anime_df, user_favorite_title)
     anime_df = anime_df = gl.compute_genre_likeness(anime_df, id_arr, favorite_anime_id)
     print("genre likeness calculated")
@@ -78,11 +78,10 @@ def get_anime_recs_formatted(username, fav_tv_show):
 
     top_anime_recs = []
     for i in range(10):
-        index = temp_df['Name'].index[i]
+        index = temp_df['English name'].index[i]
         top_anime_recs.append(
             {
                 "anime_actual_rank":    int(i),
-                "name":                 str(temp_df["Name"][index]),
                 "english_name":         str(temp_df["English name"][index]),
                 "anime_id":             int(temp_df["anime_id"][index]),
                 "score":                float(temp_df["Score"][index]),
