@@ -3,6 +3,14 @@ import re
 from gensim.corpora import Dictionary
 from gensim.models import LdaModel
 from gensim.similarities import MatrixSimilarity
+import nltk
+from nltk.corpus import stopwords
+from nltk import pos_tag
+import pickle
+
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
+stopwords = set(stopwords.words('english'))
 
 def get_anime_id(anime_df,show_name):
         flag = True
@@ -57,21 +65,45 @@ def keyword_analysis(pop_df, anime_df, anime_id):
     anime_df = pd.read_csv('updated-anime-dataset-2023.csv')
     #solves a random error
     pop_df = pop_df
-
+    """
     # Preprocess the synopses
     synopses_tv = pop_df['Synopsis'].values.astype('U')  # Convert synopses to Unicode
 
     # Tokenize the synopses
     tokenized_synopses_tv = [synopsis.split() for synopsis in synopses_tv]
 
+    tokenized_synopses_no_stopwords = [[token for token in synopsis if token.lower() not in stopwords] for synopsis in tokenized_synopses_tv]
+
+    # POS Tagging
+    tokenized_synopses_pos = [pos_tag(tokens) for tokens in tokenized_synopses_no_stopwords]
+    
+    # Keep tokens that are nouns, verbs, adjectives, and adverbs
+    allowed_pos = {'NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'JJ', 'JJR', 'JJS', 'RB', 'RBR', 'RBS'}
+    tokenized_synopses_filtered = [[token for token, pos in tagged_tokens if pos in allowed_pos] for tagged_tokens in tokenized_synopses_pos]
+    
+    # Remove tokens that are too short or too long
+    tokenized_synopses_filtered = [[token for token in synopsis if 2 <= len(token) <= 15] for synopsis in tokenized_synopses_filtered]
+    
+    # Remove tokens containing non-alphabetical characters or digits
+    tokenized_synopses_filtered = [[token for token in synopsis if token.isalpha()] for synopsis in tokenized_synopses_filtered]
+    
     # Create a dictionary representation of the synopses
-    dictionary_tv = Dictionary(tokenized_synopses_tv)
+    dictionary_tv = Dictionary(tokenized_synopses_filtered)
 
     # Filter out tokens that appear in less than 10 documents or more than 50% of the documents
     dictionary_tv.filter_extremes(no_below=10, no_above=0.5)
 
+    
+
+"""
+##############################################################################seperate
+    dictionary_tv = Dictionary.load_from_text("synopDict.txt")
+
+    with open ('synopses_no_stopwords.ob', 'rb') as fp:
+        tokenized_synopses_no_stopwords = pickle.load(fp)
+
     # Convert the tokenized synopses into bag-of-words format
-    corpus_tv = [dictionary_tv.doc2bow(synopsis) for synopsis in tokenized_synopses_tv]
+    corpus_tv = [dictionary_tv.doc2bow(synopsis) for synopsis in tokenized_synopses_no_stopwords]
     print("beginning analysis")
 
     # Build the LDA model
@@ -102,11 +134,6 @@ def keyword_analysis(pop_df, anime_df, anime_id):
     #user_favorite_title = input("Enter the title of your favorite TV show: ")################
 ##############################################################################################
     #anime_id = get_anime_id(user_favorite_title)#############################################
-
-    # Check if the user's favorite show is in pop_df - redundant, would like to remove
-    if anime_id in pop_df['anime_id'].values:
-        user_favorite_index = pop_df.index[pop_df['anime_id'] == anime_id][0]  # Get the index of the user's favorite show in pop_df
-        user_favorite_title = pop_df.loc[user_favorite_index, 'Name']  # Get the name of the user's favorite show in pop_df
 
     # Preprocess the user's favorite show synopsis
  

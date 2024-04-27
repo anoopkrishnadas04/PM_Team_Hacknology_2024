@@ -9,6 +9,7 @@ def compute_genre_likeness(anime_df, id_arr, user_anime_id):
 
     favorite_anime_genres = anime_df[anime_df['anime_id'] == user_anime_id]['Genres'].values[0].split(',')
 
+
     # Create a list of unique genres
     genres_tv = anime_df['Genres'].str.split(', ').explode().unique()
 
@@ -29,8 +30,13 @@ def compute_genre_likeness(anime_df, id_arr, user_anime_id):
     for key in list(user_genres.keys()):
         sum += user_genres[key]
     for key in list(user_genres.keys()):
+
         if key in favorite_anime_genres:
             user_genres[key] += sum
+
+        if key in str(favorite_anime_genres):
+            user_genres[key] += round(sum*.65)
+
     sum = 0
     for key in list(user_genres.keys()):
         sum += user_genres[key]
@@ -42,7 +48,7 @@ def compute_genre_likeness(anime_df, id_arr, user_anime_id):
         for x in user_genres.keys():
             for y in target_anime_genres:
                 #you can add the weight values in at this point by just multipling the value of corr_matrix_tv by the weight
-                count += (corr_matrix_tv[x][y]*user_genres[x]/sum)
+                count += (corr_matrix_tv[x][y]*user_genres[x]/sum/1.1)
         return count
 
     anime_df['genre likeness'] = anime_df['Genres'].apply(add_genre_score)
