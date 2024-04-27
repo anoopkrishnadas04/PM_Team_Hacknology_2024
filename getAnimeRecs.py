@@ -34,22 +34,24 @@ def get_anime_recs(username, fav_tv_show):
     #generating the length difference scores
     anime_df = lp.apply_length_difference(anime_df, id_arr)
 
-    ########################################
-    #filter out anime the user has already watched
-    anime_df = anime_df[~anime_df['anime_id'].isin(id_arr)]
+    
     
     ######################################## CODE NEEDS TO BE WRITTEN
     #as of now the likeness score is calculated by the genre likeness, the length likeness, and soon to be the keyword analysis
     #keyword analysis returns a perentage of similairity whilst length likeness is an integer value between 0 and 4 with lower 
     #values being better, and genre likeness is returned as a percentage
     anime_df = anime_df.assign(final_likeness = lambda x: (x['newScore']*x['genre likeness']*x['lengthLikeness']))
-    anime_df = anime_df[~anime_df['anime_id'].isin(gal.get_dropped_anime_list(username))]
+    #anime_df = anime_df[~anime_df['anime_id'].isin(gal.get_dropped_anime_list(username))]
     anime_df = anime_df.sort_values(by='final_likeness', ascending=False)
-    filter_anime_df = anime_df.head(5000)
+    filter_anime_df = anime_df#.head(5000)
 
     ########################################
     #this is where keyword analysis takes place on the top 5000? anime based on similairity score
     filter_anime_df = ka.keyword_analysis(filter_anime_df, anime_df, favorite_anime_id)
+
+    ########################################
+    #filter out anime the user has already watched
+    filter_anime_df = filter_anime_df[~filter_anime_df['anime_id'].isin(id_arr)]
 
      ########################################
      #here we are applying a popularity score to make sure that recommendations return anime the user
@@ -65,14 +67,14 @@ def get_anime_recs(username, fav_tv_show):
     filter_anime_df = filter_anime_df.drop(['Other name'], axis = 1)
 
     #print statement for testing purposes
-    filter_anime_df = filter_anime_df.drop(['Name'], axis = 1)
     filter_anime_df = filter_anime_df.drop(['Genres'], axis = 1)
+    filter_anime_df = filter_anime_df.drop(['Synopsis'], axis = 1)
     print(filter_anime_df.sort_values(by='final_likeness', ascending=False).head(10))
 
     ######################################## 
     #the data frame is returned to the user in order of score and similairity
     return(filter_anime_df.sort_values(by='final_likeness', ascending=False))
-get_anime_recs("TheYellowInvader","One Piece")
+get_anime_recs("TheYellowInvader","Tomodachi Game")
 
 def get_anime_recs_formatted(username, fav_tv_show):
     temp_df = get_anime_recs(username, fav_tv_show)

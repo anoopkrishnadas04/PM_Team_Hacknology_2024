@@ -1,4 +1,5 @@
 import pandas as pd
+import process_synopsis as ps
 
 ###########################################################
 #create the dataframe based off of the csv
@@ -66,3 +67,5 @@ anime_df['newScore'] = pd.to_numeric(anime_df['newScore'], errors='coerce')
 print("calculated new scores")
 # Writes the new scores into a csv so this code does not need to run every time we process a users MAL
 anime_df.to_csv('updated-anime-dataset-2023.csv', index=False)
+
+ps.process_synopsis(anime_df)
