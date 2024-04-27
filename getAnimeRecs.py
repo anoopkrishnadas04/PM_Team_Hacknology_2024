@@ -65,13 +65,13 @@ def get_anime_recs(username, fav_tv_show):
     filter_anime_df = filter_anime_df.drop(['Other name'], axis = 1)
 
     #print statement for testing purposes
-    filter_anime_df = filter_anime_df.drop(['Name'], axis = 1)
+    #filter_anime_df = filter_anime_df.drop(['Name'], axis = 1)
     print(filter_anime_df.sort_values(by='final_likeness', ascending=False).head(10))
 
     ######################################## 
     #the data frame is returned to the user in order of score and similairity
     return(filter_anime_df.sort_values(by='final_likeness', ascending=False))
-#get_anime_recs("holesumname")
+# get_anime_recs("holesumname", "One Piece")
 
 def get_anime_recs_formatted(username, fav_tv_show):
     temp_df = get_anime_recs(username, fav_tv_show)

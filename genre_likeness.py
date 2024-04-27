@@ -30,7 +30,7 @@ def compute_genre_likeness(anime_df, id_arr, user_anime_id):
         sum += user_genres[key]
     for key in list(user_genres.keys()):
         if key in favorite_anime_genres:
-            user_genres[key] += sum*.25
+            user_genres[key] += sum
     sum = 0
     for key in list(user_genres.keys()):
         sum += user_genres[key]
